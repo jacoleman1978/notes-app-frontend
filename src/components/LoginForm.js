@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
@@ -10,6 +10,10 @@ const LoginForm = () => {
     // Use state to keep track of info entered into the form
     let [formUserName, setUserName] = useState("");
     let [formPassword, setPassword] = useState("");
+
+    let [errorMessage, setErrorMessage] = useState("");
+    let [userNameError, setUserNameError] = useState(false);
+    let [passwordError, setPasswordError] = useState(false);
     
     // Uses the DataService to attempt to login
     const handleSubmit = (e) => {
@@ -19,12 +23,23 @@ const LoginForm = () => {
             password: formPassword
         };
         UserDataService.Login(data).then(res => {
-            if (res.status === 200) {
-                navigate('/notes')
-            }
+            if (res.data.userId.length > 0) {
+                navigate(`/notes/${res.data.userId}`);
+            } else {
+                setErrorMessage(res.data.message);
+            } 
         });
-        
     }
+
+    useEffect(() => {
+        if (errorMessage === "Invalid username") {
+            setUserNameError(true);
+            setPasswordError(false);
+        } else if (errorMessage === "Invalid password") {
+            setUserNameError(false);
+            setPasswordError(true);
+        }
+    }, [errorMessage])
 
     // Redirect to /auth/signup when Create Account button clicked
     const handleCreateAccount = () => {
@@ -42,6 +57,9 @@ const LoginForm = () => {
                         onChange={(e) => setUserName(e.target.value)}
                         required 
                     />
+                    <Form.Text>
+                        {userNameError ? errorMessage : ""}
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formPassword">
@@ -52,6 +70,9 @@ const LoginForm = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    <Form.Text>
+                        {passwordError ? errorMessage : ""}
+                    </Form.Text>
                 </Form.Group>
 
                 <Button variant="primary" type="submit">
