@@ -13,12 +13,17 @@ const LoginForm = () => {
     
     // Uses the DataService to attempt to login
     const handleSubmit = (e) => {
+        e.preventDefault()
         let data = {
             username: formUserName,
             password: formPassword
         };
-        UserDataService.login(data);
-        navigate('/notes');
+        UserDataService.Login(data).then(res => {
+            if (res.status === 200) {
+                navigate('/notes')
+            }
+        });
+        
     }
 
     // Redirect to /auth/signup when Create Account button clicked
@@ -53,13 +58,14 @@ const LoginForm = () => {
                     Login
                 </Button>
             </Form>
-
             <Button 
                 variant="secondary" 
+                type="button"
                 onClick={handleCreateAccount}
             >
                 Create Account
             </Button>
+
         </div>
     )
 }

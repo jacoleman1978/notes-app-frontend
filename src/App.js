@@ -4,6 +4,7 @@ import React from 'react';
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import NavBar from './components/NavBar';
 import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 import DisplayContainer from "./components/DisplayContainer";
 import {Container} from 'react-bootstrap';
 
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Navigate to='/auth/login'/>} />
             <Route path='/auth/login' element={<LoginForm/>} />
+            <Route path='/auth/signup' element={<SignupForm/>} />
             <Route path='/notes' element={<DisplayContainer/>} />
           </Routes>
         </Router>
