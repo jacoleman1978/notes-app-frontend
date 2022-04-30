@@ -4,7 +4,7 @@ import {Form, Button} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
 
 const LoginForm = () => {
-    // navigate allows redirection to another page when the button is clicked
+    // Navigate allows redirection to another page when the button is clicked
     const navigate = useNavigate();
     
     // Use state to keep track of info entered into the form
@@ -15,9 +15,9 @@ const LoginForm = () => {
     let [userNameError, setUserNameError] = useState(false);
     let [passwordError, setPasswordError] = useState(false);
     
-    // Uses the DataService to attempt to login
+    // Use the DataService to attempt to login
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         let data = {
             username: formUserName,
             password: formPassword
@@ -29,7 +29,7 @@ const LoginForm = () => {
                 setErrorMessage(res.data.message);
             } 
         });
-    }
+    };
 
     useEffect(() => {
         if (errorMessage === "Invalid username") {
@@ -39,7 +39,7 @@ const LoginForm = () => {
             setUserNameError(false);
             setPasswordError(true);
         }
-    }, [errorMessage])
+    }, [errorMessage]);
 
     // Redirect to /auth/signup when Create Account button clicked
     const handleCreateAccount = () => {
