@@ -21,6 +21,11 @@ const SignupForm = () => {
     let [userNameError, setUserNameError] = useState(false);
     let [emailError, setEmailError] = useState(false);
     
+    // Error message text
+    const userNameErrorMessage = "Username Already Taken";
+    const emailErrorMessage = "Email Already Linked to An Account";
+    const passwordErrorMessage = "Passwords Do Not Match";
+
     // Use the DataService to submit new user account info
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,32 +44,32 @@ const SignupForm = () => {
             // Verify that email and username are unique
             UserDataService.IsSignupInfoUnique(data).then(res => {
                 if (!res.data.isUniqueUserName) {
-                    setErrorMessage("Username Already Taken");
+                    setErrorMessage(userNameErrorMessage);
                 } else if (!res.data.isUniqueEmail) {
-                    setErrorMessage("Email Already Linked to An Account");
+                    setErrorMessage(emailErrorMessage);
                 } else {
                     UserDataService.Signup(data).then(res => {
-
+                        navigate(`/notes/${res.data.userId}`);
                     })
                 }
             })
             
         } else {
-            setErrorMessage("Passwords Do Not Match");
+            setErrorMessage(passwordErrorMessage);
         }
     };
 
     // Display errorMessage on form if error exists
     useEffect(() => {
-        if (errorMessage === "Username Already Taken") {
+        if (errorMessage === userNameErrorMessage) {
             setPasswordError(false);
             setUserNameError(true);
             setEmailError(false);
-        } else if (errorMessage === "Email Already Linked to An Account") {
+        } else if (errorMessage === emailErrorMessage) {
             setPasswordError(false);
             setUserNameError(false);
             setEmailError(true);
-        } else if (errorMessage === "Passwords Do Not Match") {
+        } else if (errorMessage === passwordErrorMessage) {
             setPasswordError(true);
             setUserNameError(false);
             setEmailError(false);
