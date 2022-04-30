@@ -11,6 +11,7 @@ const LoginForm = () => {
     let [formUserName, setUserName] = useState("");
     let [formPassword, setPassword] = useState("");
 
+    // Use state for error checking
     let [errorMessage, setErrorMessage] = useState("");
     let [userNameError, setUserNameError] = useState(false);
     let [passwordError, setPasswordError] = useState(false);
@@ -31,6 +32,7 @@ const LoginForm = () => {
         });
     };
 
+    // Display errorMessage on form if error exists
     useEffect(() => {
         if (errorMessage === "Invalid username") {
             setUserNameError(true);

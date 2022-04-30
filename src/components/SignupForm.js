@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button, Row, Col} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
@@ -15,20 +15,61 @@ const SignupForm = () => {
     let [formPassword, setPassword] = useState("");
     let [formVerifyPassword, setVerifyPassword] = useState("");
 
+    // Use state for error checking
+    let [errorMessage, setErrorMessage] = useState("");
+    let [passwordError, setPasswordError] = useState(false);
+    let [userNameError, setUserNameError] = useState(false);
+    let [emailError, setEmailError] = useState(false);
+    
     // Use the DataService to submit new user account info
     const handleSubmit = (e) => {
         e.preventDefault();
-        let data = {
-            firstName: formFirstName,
-            lastName: formLastName,
-            username: formUserName,
-            email: formEmail,
-            password: formPassword
-        };
-        UserDataService.Signup(data).then(res => {
-            // TODO: Need to add logic
-        });
+
+        if (formPassword === formVerifyPassword) {
+            setPasswordError(false)
+
+            let data = {
+                firstName: formFirstName,
+                lastName: formLastName,
+                username: formUserName,
+                email: formEmail,
+                password: formPassword
+            };
+
+            // Verify that email and username are unique
+            UserDataService.IsSignupInfoUnique(data).then(res => {
+                if (!res.data.isUniqueUserName) {
+                    setErrorMessage("Username Already Taken");
+                } else if (!res.data.isUniqueEmail) {
+                    setErrorMessage("Email Already Linked to An Account");
+                } else {
+                    UserDataService.Signup(data).then(res => {
+
+                    })
+                }
+            })
+            
+        } else {
+            setErrorMessage("Passwords Do Not Match");
+        }
     };
+
+    // Display errorMessage on form if error exists
+    useEffect(() => {
+        if (errorMessage === "Username Already Taken") {
+            setPasswordError(false);
+            setUserNameError(true);
+            setEmailError(false);
+        } else if (errorMessage === "Email Already Linked to An Account") {
+            setPasswordError(false);
+            setUserNameError(false);
+            setEmailError(true);
+        } else if (errorMessage === "Passwords Do Not Match") {
+            setPasswordError(true);
+            setUserNameError(false);
+            setEmailError(false);
+        } 
+    }, [errorMessage]);
 
     // Redirect to /auth/login when Back to Login button clicked
     const handleBackToLogin = () => {
@@ -77,6 +118,9 @@ const SignupForm = () => {
                             onChange={(e) => setUserName(e.target.value)}
                             required
                         />
+                        <Form.Text>
+                            {userNameError ? errorMessage : ""}
+                        </Form.Text>
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="formEmail">
@@ -87,6 +131,9 @@ const SignupForm = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
+                        <Form.Text>
+                            {emailError ? errorMessage : ""}
+                        </Form.Text>
                     </Form.Group>
                 </Row>
 
@@ -109,6 +156,9 @@ const SignupForm = () => {
                             onChange={(e) => setVerifyPassword(e.target.value)}
                             required
                         />
+                        <Form.Text>
+                            {passwordError ? errorMessage : ""}
+                        </Form.Text>
                     </Form.Group>
                 </Row>
 
