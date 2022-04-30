@@ -24,8 +24,8 @@ const LoginForm = () => {
             password: formPassword
         };
         UserDataService.Login(data).then(res => {
-            if (res.data.userId.length > 0) {
-                navigate(`/notes/${res.data.userId}`);
+            if (res.data.userName.length > 0) {
+                navigate(`/notes/${res.data.userName}`);
             } else {
                 setErrorMessage(res.data.message);
             } 

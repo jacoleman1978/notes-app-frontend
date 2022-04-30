@@ -49,7 +49,7 @@ const SignupForm = () => {
                     setErrorMessage(emailErrorMessage);
                 } else {
                     UserDataService.Signup(data).then(res => {
-                        navigate(`/notes/${res.data.userId}`);
+                        navigate(`/notes/${res.data.userName}`);
                     })
                 }
             })
