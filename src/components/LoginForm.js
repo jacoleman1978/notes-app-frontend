@@ -1,11 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
+import { CurrentUser } from '../contexts/currentUser';
 
 const LoginForm = () => {
     // Navigate allows redirection to another page when the button is clicked
     const navigate = useNavigate();
+
+    // Store current user in Context
+    const {setCurrentUser} = useContext(CurrentUser);
     
     // Use state to keep track of info entered into the form
     let [formUserName, setUserName] = useState("");
@@ -25,6 +29,7 @@ const LoginForm = () => {
         };
         UserDataService.Login(data).then(res => {
             if (res.data.userName.length > 0) {
+                setCurrentUser(res.data.session);
                 navigate(`/notes/${res.data.userName}`);
             } else {
                 setErrorMessage(res.data.message);

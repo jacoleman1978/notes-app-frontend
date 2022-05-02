@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { CurrentUser } from '../contexts/currentUser';
 
 const DisplayContainer = () => {
+    // Store current user in Context
+    const {currentUser} = useContext(CurrentUser);
+
     return (
         <>
-        <h1>Display Container</h1>
+        <h1>{currentUser._id}</h1>
         </>
     )
 }

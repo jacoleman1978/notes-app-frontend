@@ -6,21 +6,24 @@ import NavBar from './components/NavBar';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import DisplayContainer from "./components/DisplayContainer";
+import CurrentUserProvider from './contexts/currentUser'
 import {Container} from 'react-bootstrap';
 
 function App() {
   return (
-      <Container className="App">
-        <NavBar />
-        <Router>
-          <Routes>
-            <Route path='/' element={<Navigate to='/auth/login'/>} />
-            <Route path='/auth/login' element={<LoginForm/>} />
-            <Route path='/auth/signup' element={<SignupForm/>} />
-            <Route path='/notes' element={<DisplayContainer/>} />
-          </Routes>
-        </Router>
-      </Container>
+      <CurrentUserProvider>
+        <Container className="App">
+          <NavBar />
+          <Router>
+            <Routes>
+              <Route path='/' element={<Navigate to='/auth/login'/>} />
+              <Route path='/auth/login' element={<LoginForm/>} />
+              <Route path='/auth/signup' element={<SignupForm/>} />
+              <Route path='/notes/:userName' element={<DisplayContainer/>} />
+            </Routes>
+          </Router>
+        </Container>
+      </CurrentUserProvider>
   );
 }
 

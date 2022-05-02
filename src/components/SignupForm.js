@@ -1,11 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Form, Button, Row, Col} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
+import { CurrentUser } from '../contexts/currentUser';
 
 const SignupForm = () => {
     // Navigate allows redirection to another page when the form is submitted
     const navigate = useNavigate();
+
+    // Store current user in Context
+    const {setCurrentUser} = useContext(CurrentUser);
 
     // Use state to keep track of info entered into the form
     let [formFirstName, setFirstName] = useState("");
@@ -49,6 +53,7 @@ const SignupForm = () => {
                     setErrorMessage(emailErrorMessage);
                 } else {
                     UserDataService.Signup(data).then(res => {
+                        setCurrentUser(res.data.user);
                         navigate(`/notes/${res.data.userName}`);
                     })
                 }
