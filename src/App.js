@@ -19,7 +19,8 @@ function App() {
               <Route path='/' element={<Navigate to='/auth/login'/>} />
               <Route path='/auth/login' element={<LoginForm/>} />
               <Route path='/auth/signup' element={<SignupForm/>} />
-              <Route path='/notes/:userName' element={<DisplayContainer/>} />
+              <Route path='/notes/:userName' element={<DisplayContainer isHome={true}/>} />
+              <Route path='/notes/:userName/:topicId' element={<DisplayContainer isHome={false}/>} />
             </Routes>
           </Router>
         </Container>

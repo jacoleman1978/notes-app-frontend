@@ -1,4 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 import { CurrentUser } from '../contexts/currentUser';
 import NoteDataService from '../services/noteDataService';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
@@ -6,9 +7,15 @@ import BreadCrumbs from './BreadCrumbs';
 import TopicGroup from './TopicGroup';
 import NoteGroup from './NoteGroup';
 
-const DisplayContainer = () => {
+const DisplayContainer = (props) => {
     // Get currentUser from context
     const {currentUser} = useContext(CurrentUser);
+
+    // Props
+    const {isHome} = props;
+
+    // Params
+    const {topicId} = useParams();
 
     // State info related to the parent topic
     let [parentTopicId, setParentTopicId] = useState("");
@@ -17,17 +24,25 @@ const DisplayContainer = () => {
     let [topicChildrenArray, setTopicChildrenArray] = useState([]);
     let [noteChildrenArray, setNoteChildrenArray] = useState([]);
 
-    // Get topic data for 'Home Directory' topic
-    NoteDataService.GetHomeDirectory(currentUser.userName).then(
-    res => {
+    const saveTopicData = (res) => {
         let topicData = res.data;
-        console.log(topicData)
         setParentTopicId(topicData._id);
         setUserName(topicData.userName);
         setTopicName(topicData.topicName);
-        setTopicChildrenArray(...topicData.topicChildrenIds);
-        setNoteChildrenArray(...topicData.noteChildrenIds);
-    })
+        setTopicChildrenArray(topicData.topicChildrenIds);
+        setNoteChildrenArray(topicData.noteChildrenIds);
+    }
+
+    useEffect(() => {
+        if (isHome) {
+            // Get topic data for 'Home Directory' topic
+            NoteDataService.GetHomeDirectory(currentUser.userName).then(res => {saveTopicData(res)})
+        } else {
+            NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {saveTopicData(res)})
+        }
+        
+    }, [currentUser, topicId, isHome])
+
 
     return (
         <ParentTopicContext.Provider value={{
