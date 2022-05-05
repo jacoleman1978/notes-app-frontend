@@ -4,7 +4,7 @@ import axios from 'axios';
 class NoteDataService {
     static NewTopic(userName, parentTopicId, topicName) {
         axios.defaults.withCredentials = true;
-        return axios.post(`http://localhost:4343/notes/${userName}/${parentTopicId}/new/topic`, topicName)
+        return axios.post(`http://localhost:4343/notes/${userName}/${parentTopicId}/new/topic`, {topicName: topicName})
     }
 
     static GetHomeDirectory(userName) {
@@ -19,7 +19,7 @@ class NoteDataService {
 
     static EditTopic(userName, topicId, topicName) {
         axios.defaults.withCredentials = true;
-        return axios.put(`http://localhost:4343/notes/${userName}/${topicId}`, topicName)
+        return axios.put(`http://localhost:4343/notes/${userName}/${topicId}`, {topicName: topicName})
     }
 
     static DeleteTopic(userName, topicId) {
@@ -29,12 +29,12 @@ class NoteDataService {
 
     static NewNote(userName, parentTopicId, content) {
         axios.defaults.withCredentials = true;
-        return axios.post(`http://localhost:4343/notes/${userName}/${parentTopicId}/new/note`, content)
+        return axios.post(`http://localhost:4343/notes/${userName}/${parentTopicId}/new/note`, {content: content})
     }
 
     static EditNote(userName, parentTopicId, noteId, content) {
         axios.defaults.withCredentials = true;
-        return axios.put(`http://localhost:4343/notes/${userName}/${parentTopicId}/${noteId}`, content)
+        return axios.put(`http://localhost:4343/notes/${userName}/${parentTopicId}/${noteId}`, {content: content})
     }
 
     static DeleteNote(userName, parentTopicId, noteId) {
