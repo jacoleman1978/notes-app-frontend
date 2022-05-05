@@ -8,12 +8,13 @@ const NoteGroup = () => {
     
     const noteList = noteChildrenArray.map((note) => {
         return (
-            <Note 
-                key={note._id} 
-                content={note.content} 
-                noteId={note._id}
-                parentTopicId={note.parentTopicId}
-            />
+            <li key={note._id} >
+                <Note 
+                    content={note.content} 
+                    noteId={note._id}
+                    parentTopicId={note.parentTopicId}
+                />
+            </li>
         )
     })
 
@@ -24,7 +25,10 @@ const NoteGroup = () => {
 
     return (
         <div style={noteGroupStyle}>
-            {noteList}
+            <ul>
+                {noteList}
+            </ul>
+            
         </div>
     )
 }

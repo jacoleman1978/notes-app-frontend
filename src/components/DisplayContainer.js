@@ -23,6 +23,7 @@ const DisplayContainer = (props) => {
     let [topicName, setTopicName] = useState("");
     let [topicChildrenArray, setTopicChildrenArray] = useState([]);
     let [noteChildrenArray, setNoteChildrenArray] = useState([]);
+    let [breadcrumbs, setBreadcrumb] = useState([]);
 
     const saveTopicData = (res) => {
         let topicData = res.data;
@@ -36,13 +37,21 @@ const DisplayContainer = (props) => {
     useEffect(() => {
         if (isHome) {
             // Get topic data for 'Home Directory' topic
-            NoteDataService.GetHomeDirectory(currentUser.userName).then(res => {saveTopicData(res)})
+            NoteDataService.GetHomeDirectory(currentUser.userName).then(res => {
+                saveTopicData(res);
+                setBreadcrumb([res.data._id]);
+            })
         } else {
-            NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {saveTopicData(res)})
+            NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
+                saveTopicData(res);
+                setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id])
+            })
         }
-        
     }, [currentUser, topicId, isHome])
 
+    useEffect(() => {
+        setBreadcrumb(breadcrumbs => [...new Set(breadcrumbs)])
+    }, [topicId])
 
     return (
         <ParentTopicContext.Provider value={{
@@ -50,10 +59,12 @@ const DisplayContainer = (props) => {
             userName: userName,
             topicName: topicName,
             topicChildrenArray: topicChildrenArray,
-            noteChildrenArray: noteChildrenArray
+            noteChildrenArray: noteChildrenArray,
+            breadcrumbs: breadcrumbs,
+            setBreadcrumb: setBreadcrumb
         }}>
             <BreadCrumbs />
-            <h1>{topicName}</h1>
+            <h1>Current Topic: {topicName}</h1>
             <TopicGroup />
             <NoteGroup />
         </ParentTopicContext.Provider>
