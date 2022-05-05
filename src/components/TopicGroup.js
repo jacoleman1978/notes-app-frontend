@@ -40,7 +40,7 @@ const TopicGroup = () => {
         border: "1px solid red",
         margin: "5px",
         height: "5rem",
-        width: "rem",
+        width: "12rem",
         fontSize: "3rem"
     }
 
