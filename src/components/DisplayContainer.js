@@ -24,6 +24,7 @@ const DisplayContainer = (props) => {
     let [topicChildrenArray, setTopicChildrenArray] = useState([]);
     let [noteChildrenArray, setNoteChildrenArray] = useState([]);
     let [breadcrumbs, setBreadcrumb] = useState([]);
+    let [refresh, setRefresh] = useState(false);
 
     const saveTopicData = (res) => {
         let topicData = res.data;
@@ -42,14 +43,16 @@ const DisplayContainer = (props) => {
                     saveTopicData(res);
                     setBreadcrumb([res.data._id]);
                 }
+                setRefresh(false);
             })
         } else if (!isHome){
             NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
                 saveTopicData(res);
-                setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id])
+                setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id]);
+                setRefresh(false);
             })
         }
-    }, [currentUser, topicId, isHome])
+    }, [currentUser, topicId, isHome, refresh])
 
     useEffect(() => {
         setBreadcrumb(breadcrumbs => [...new Set(breadcrumbs)])
@@ -63,7 +66,8 @@ const DisplayContainer = (props) => {
             topicChildrenArray: topicChildrenArray,
             noteChildrenArray: noteChildrenArray,
             breadcrumbs: breadcrumbs,
-            setBreadcrumb: setBreadcrumb
+            setBreadcrumb: setBreadcrumb,
+            setRefresh: setRefresh
         }}>
             <BreadCrumbs />
             <TopicGroup />

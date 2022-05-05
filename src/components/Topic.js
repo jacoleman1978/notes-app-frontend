@@ -21,7 +21,7 @@ const Topic = (props) => {
         border: "1px solid red",
         margin: "5px",
         height: "5rem",
-        width: "12rem"
+        width: "14rem"
     }
 
     return (

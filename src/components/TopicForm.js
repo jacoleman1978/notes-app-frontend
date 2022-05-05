@@ -7,7 +7,7 @@ import { CurrentUser } from '../contexts/currentUser';
 const TopicForm = (props) => {
     const {topicName, setTopicName, setShowForm} = props;
 
-    const {parentTopicId} = useContext(ParentTopicContext);
+    const {parentTopicId, setRefresh} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
 
     const handleSubmit = (e) => {
@@ -15,6 +15,7 @@ const TopicForm = (props) => {
         if (topicName.length !== 0) {
             NoteDataService.NewTopic(currentUser.userName, parentTopicId, topicName)
             setShowForm(false);
+            setRefresh(true);
         }
     }
 

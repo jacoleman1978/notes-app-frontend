@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button} from 'react-bootstrap';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
 import Topic from './Topic';
@@ -11,10 +11,6 @@ const TopicGroup = () => {
     // State for new topic flag
     const [showForm, setShowForm] = useState(false);
     const [topicName, setTopicName] = useState("");
-
-    useEffect(() => {
-
-    }, [topicName])
 
     const topicList = topicChildrenArray.map((topic) => {
         return (
@@ -29,7 +25,7 @@ const TopicGroup = () => {
     const topicGroupStyle = {
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "center",
+        justifyContent: "start",
         alignItems: "center"
     }
 
@@ -50,7 +46,7 @@ const TopicGroup = () => {
     }
 
     return (
-        <div >
+        <div>
             <div style={topicTitleStyle}>
                 <h1>Topic: {parentTopicName}</h1>
                     <Button variant="success" style={newTopicBtnStyle} onClick={handleNewTopicClick}>
