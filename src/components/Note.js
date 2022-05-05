@@ -16,6 +16,7 @@ const Note = (props) => {
 
     const noteStyle = {
         display: "flex",
+        width: "90%",
         alignItems: "center",
         justifyContent: "start",
         paddingLeft: "5px",

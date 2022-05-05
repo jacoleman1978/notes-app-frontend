@@ -34,7 +34,7 @@ const TopicGroup = () => {
         justifyContent: "center"
     }
 
-    const newTopicBtnStyle = {
+    const topicBtnStyle = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -42,16 +42,22 @@ const TopicGroup = () => {
         margin: "5px",
         height: "2.5rem",
         width: "2.5rem",
-        fontSize: "2rem"
+        fontSize: "1.75rem"
     }
 
     return (
         <div>
             <div style={topicTitleStyle}>
                 <h1>Topic: {parentTopicName}</h1>
-                    <Button variant="success" style={newTopicBtnStyle} onClick={handleNewTopicClick}>
-                        +
-                    </Button>
+                <Button variant="success" style={topicBtnStyle} onClick={handleNewTopicClick}>
+                    +
+                </Button>
+                <Button variant="primary" style={topicBtnStyle} onClick={handleNewTopicClick}>
+                    <i className="far fa-edit"></i>
+                </Button>
+                <Button variant="danger" style={topicBtnStyle} onClick={handleNewTopicClick}>
+                    <i className="fas fa-trash-alt"></i>
+                </Button>
             </div>
             {showForm ? <TopicForm topicName={topicName} setTopicName={setTopicName} setShowForm={setShowForm}/> : ""}
             <div style={topicGroupStyle}>
