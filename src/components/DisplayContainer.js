@@ -20,7 +20,7 @@ const DisplayContainer = (props) => {
     // State info related to the parent topic
     let [parentTopicId, setParentTopicId] = useState("");
     let [userName, setUserName] = useState("");
-    let [topicName, setTopicName] = useState("");
+    let [parentTopicName, setParentTopicName] = useState("");
     let [topicChildrenArray, setTopicChildrenArray] = useState([]);
     let [noteChildrenArray, setNoteChildrenArray] = useState([]);
     let [breadcrumbs, setBreadcrumb] = useState([]);
@@ -29,19 +29,21 @@ const DisplayContainer = (props) => {
         let topicData = res.data;
         setParentTopicId(topicData._id);
         setUserName(topicData.userName);
-        setTopicName(topicData.topicName);
+        setParentTopicName(topicData.topicName);
         setTopicChildrenArray(topicData.topicChildrenIds);
         setNoteChildrenArray(topicData.noteChildrenIds);
     }
 
     useEffect(() => {
-        if (isHome) {
+        if (isHome && currentUser !== undefined) {
             // Get topic data for 'Home Directory' topic
             NoteDataService.GetHomeDirectory(currentUser.userName).then(res => {
-                saveTopicData(res);
-                setBreadcrumb([res.data._id]);
+                if (res.data !== null) {
+                    saveTopicData(res);
+                    setBreadcrumb([res.data._id]);
+                }
             })
-        } else {
+        } else if (!isHome){
             NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
                 saveTopicData(res);
                 setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id])
@@ -57,14 +59,13 @@ const DisplayContainer = (props) => {
         <ParentTopicContext.Provider value={{
             parentTopicId: parentTopicId,
             userName: userName,
-            topicName: topicName,
+            parentTopicName: parentTopicName,
             topicChildrenArray: topicChildrenArray,
             noteChildrenArray: noteChildrenArray,
             breadcrumbs: breadcrumbs,
             setBreadcrumb: setBreadcrumb
         }}>
             <BreadCrumbs />
-            <h1>Current Topic: {topicName}</h1>
             <TopicGroup />
             <NoteGroup />
         </ParentTopicContext.Provider>

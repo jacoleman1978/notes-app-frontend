@@ -1,12 +1,12 @@
 import React, {useContext, useState, useEffect} from 'react';
+import {Button} from 'react-bootstrap';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
-import {Button} from 'react-bootstrap'
 import Topic from './Topic';
 import TopicForm from './TopicForm';
 
 const TopicGroup = () => {
     // Get topic data from context
-    const {topicChildrenArray} = useContext(ParentTopicContext);
+    const {topicChildrenArray, parentTopicName} = useContext(ParentTopicContext);
 
     // State for new topic flag
     const [showForm, setShowForm] = useState(false);
@@ -33,28 +33,35 @@ const TopicGroup = () => {
         alignItems: "center"
     }
 
+    const topicTitleStyle = {
+        display: "flex",
+        justifyContent: "center"
+    }
+
     const newTopicBtnStyle = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         border: "1px solid red",
         margin: "5px",
-        height: "5rem",
-        width: "12rem",
-        fontSize: "3rem"
+        height: "2.5rem",
+        width: "2.5rem",
+        fontSize: "2rem"
     }
 
     return (
-        <div>
-            <div style={topicGroupStyle}>
-                {topicList}
-                <Button variant="success" style={newTopicBtnStyle} onClick={handleNewTopicClick}>
-                    +
-                </Button>
+        <div >
+            <div style={topicTitleStyle}>
+                <h1>Topic: {parentTopicName}</h1>
+                    <Button variant="success" style={newTopicBtnStyle} onClick={handleNewTopicClick}>
+                        +
+                    </Button>
             </div>
             {showForm ? <TopicForm topicName={topicName} setTopicName={setTopicName} setShowForm={setShowForm}/> : ""}
+            <div style={topicGroupStyle}>
+                {topicList}
+            </div>
         </div>
-
     )
 }
 
