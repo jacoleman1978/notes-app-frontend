@@ -1,20 +1,16 @@
-import React, {useContext} from 'react';
-import { CurrentUser } from '../contexts/currentUser';
-import {useNavigate} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import ConfirmDeleteNoteMessage from './ConfirmDeleteNoteMessage';
 
 const Note = (props) => {
-    const {content, noteId, parentTopicId} = props;
+    const {noteId, deleteNoteId, content, deleteFlag, deleteConfirmationClick, cancelDelete} = props;
 
-    // Get currentUser from context
-    const {currentUser} = useContext(CurrentUser);
+    const [showFlag, setShowFlag] = useState(false);
 
-    const navigate = useNavigate();
-
-    const handleNoteClick = (e) => {
-        navigate(`/notes/${currentUser.userName}/${parentTopicId}/${noteId}`)
+    const textStyle = {
+        marginBottom: "0px"
     }
 
-    const noteStyle = {
+    let noteStyle = {
         display: "flex",
         width: "90%",
         alignItems: "center",
@@ -24,9 +20,23 @@ const Note = (props) => {
         margin: "5px",
     }
 
+    useEffect(() => {
+        if (deleteFlag && noteId === deleteNoteId) {
+            setShowFlag(true);
+        } else {
+            setShowFlag(false);
+        }
+    }, [deleteFlag, noteId, deleteNoteId, cancelDelete])
+
     return (
-        <div style={noteStyle} onClick={handleNoteClick} id={noteId}>
-            {content}
+        <div >
+            <div style={noteStyle}>
+                <p style={textStyle}>
+                    {content}
+                </p>
+            </div>
+
+            {showFlag ? <ConfirmDeleteNoteMessage deleteConfirmationClick={deleteConfirmationClick} cancelDelete={cancelDelete}/> : ""}
         </div>
     )
 }

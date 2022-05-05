@@ -51,6 +51,8 @@ const DisplayContainer = (props) => {
                 setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id]);
                 setRefresh(false);
             })
+        } else {
+            setRefresh(false);
         }
     }, [currentUser, topicId, isHome, refresh])
 
