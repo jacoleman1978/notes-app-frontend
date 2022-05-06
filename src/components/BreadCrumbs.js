@@ -12,8 +12,6 @@ const BreadCrumbs = () => {
         color: "purple"
     }
 
-    console.log(breadcrumbs)
-
     let breadcrumbList = Object.entries(breadcrumbs)
 
     let lastIndex = breadcrumbList.length - 1;

@@ -1,9 +1,8 @@
 import React, {useContext} from 'react';
 import {Button} from 'react-bootstrap';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
-import EditTopicButton from './EditTopicButton';
 
-const TopicButtonGroup = (props) => {
+const DeleteTopicButton = (props) => {
     const {setDeleteFlag, setDeleteTopicId, topicBtnStyle, setShowDeleteMessage} = props;
 
     const {parentTopicId} = useContext(ParentTopicContext);
@@ -14,13 +13,10 @@ const TopicButtonGroup = (props) => {
         setShowDeleteMessage(true);
     }
     return (
-        <>
-            <EditTopicButton style={topicBtnStyle}/>
-            <Button variant="danger" style={topicBtnStyle} onClick={handleDeleteTopicClick}>
-                <i className="fas fa-trash-alt"></i>
-            </Button>
-        </>
+        <Button variant="danger" style={topicBtnStyle} onClick={handleDeleteTopicClick}>
+            <i className="fas fa-trash-alt"></i>
+        </Button>
     )
 }
 
-export default TopicButtonGroup;
+export default DeleteTopicButton;

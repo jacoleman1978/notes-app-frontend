@@ -1,26 +1,45 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Form, Button, Row, Col} from 'react-bootstrap';
 import NoteDataService from '../services/noteDataService';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
 import { CurrentUser } from '../contexts/currentUser';
 
 const TopicForm = (props) => {
-    const {topicName, setTopicName, setShowForm} = props;
+    const {topicName, setTopicName, setShowForm, setEditTopicFlag, editTopicFlag} = props;
 
-    const {parentTopicId, setRefresh} = useContext(ParentTopicContext);
+    const {parentTopicName, parentTopicId, setRefresh} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
 
+    useEffect(() => {
+        if (editTopicFlag) {
+            setTopicName(parentTopicName);
+        } else {
+            setTopicName("");
+        }
+    }, [editTopicFlag, parentTopicName, setTopicName])
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         if (topicName.length !== 0) {
-            NoteDataService.NewTopic(currentUser.userName, parentTopicId, topicName)
-            setShowForm(false);
-            setRefresh(true);
+            if (editTopicFlag) {
+                NoteDataService.EditTopic(currentUser.username, parentTopicId, topicName)
+                setEditTopicFlag(false);
+                setRefresh(true);
+            } else {
+                NoteDataService.NewTopic(currentUser.userName, parentTopicId, topicName)
+                setShowForm(false);
+                setRefresh(true);
+            }
         }
     }
 
     const handleCancel = () => {
-        setShowForm(false);
+        if (editTopicFlag) {
+            setEditTopicFlag(false);
+        } else {
+            setShowForm(false);
+        }
+        
     }
 
     const rowStyle = {
@@ -36,6 +55,7 @@ const TopicForm = (props) => {
                         placeholder="Enter Topic Name"
                         onChange={(e) => setTopicName(e.target.value)}
                         required 
+                        value={topicName}
                     />
                 </Form.Group>
                 <Col sm={"4"}>

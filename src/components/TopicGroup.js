@@ -6,8 +6,9 @@ import { CurrentUser } from '../contexts/currentUser';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
 import Topic from './Topic';
 import TopicForm from './TopicForm';
-import TopicButtonGroup from './TopicButtonGroup';
 import ConfirmDeleteTopicMessage from './ConfirmDeleteTopicMessage';
+import DeleteTopicButton from './DeleteTopicButton';
+import EditTopicButton from './EditTopicButton';
 
 const TopicGroup = (props) => {
     const {isHome} = props;
@@ -25,6 +26,7 @@ const TopicGroup = (props) => {
     const [deleteTopicId, setDeleteTopicId] = useState("");
     const [confirmDelete, setDeleteConfirmation] = useState(false);
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
+    const [editTopicFlag, setEditTopicFlag] = useState(false);
 
     const handleNewTopicClick = () => {
         setShowForm(true);
@@ -55,10 +57,6 @@ const TopicGroup = (props) => {
             setShowDeleteMessage(false);
         }
     }, [deleteFlag, parentTopicId, deleteTopicId])
-
-    const handleEditTopicClick = () => {
-
-    }
 
     const topicGroupStyle = {
         display: "flex",
@@ -100,9 +98,13 @@ const TopicGroup = (props) => {
                 <Button variant="success" style={topicBtnStyle} onClick={handleNewTopicClick}>
                     +
                 </Button>
-                {!isHome ? <TopicButtonGroup handleEditTopicClick={handleEditTopicClick} topicBtnStyle={topicBtnStyle} setDeleteFlag={setDeleteFlag} setDeleteTopicId={setDeleteTopicId} parentTopicId={parentTopicId} setShowDeleteMessage={setShowDeleteMessage}/> : ""}
+                {!isHome ? <DeleteTopicButton topicBtnStyle={topicBtnStyle} setDeleteFlag={setDeleteFlag} setDeleteTopicId={setDeleteTopicId} parentTopicId={parentTopicId} setShowDeleteMessage={setShowDeleteMessage}/> : ""}
+                {!isHome ? <EditTopicButton setEditTopicFlag={setEditTopicFlag} topicBtnStyle={topicBtnStyle}/> : ""}
+
             </div>
             {showForm ? <TopicForm topicName={topicName} setTopicName={setTopicName} setShowForm={setShowForm}/> : ""}
+
+            {editTopicFlag ? <TopicForm topicName={topicName} setTopicName={setTopicName} setEditTopicFlag={setEditTopicFlag} editTopicFlag={editTopicFlag}/> : ""}
 
             {showDeleteMessage ? <ConfirmDeleteTopicMessage deleteConfirmationClick={deleteConfirmationClick} cancelDelete={cancelDelete}/> : ""}
             <div style={topicGroupStyle}>
