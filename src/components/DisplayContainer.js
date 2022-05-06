@@ -42,16 +42,16 @@ const DisplayContainer = (props) => {
                 if (res.data !== null) {
                     saveTopicData(res);
                     setBreadcrumb([res.data._id]);
+                    setRefresh(false);
                 }
-                setRefresh(false);
             })
         } else if (!isHome){
             NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
                 if (res.data !== null) {
                     saveTopicData(res);
                     setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id]);
+                    setRefresh(false);
                 }
-                setRefresh(false);
             })
         } else {
             setRefresh(false);

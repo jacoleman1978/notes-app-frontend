@@ -6,6 +6,7 @@ import { ParentTopicContext } from '../contexts/parentTopicContext';
 import Note from './Note';
 import NoteForm from './NoteForm';
 import DeleteNoteButton from './DeleteNoteButton';
+import EditNoteButton from './EditNoteButton';
 
 const NoteGroup = () => {
     // Get topic data from context
@@ -17,7 +18,9 @@ const NoteGroup = () => {
     const [content, setContent] = useState("");
     const [deleteFlag, setDeleteFlag] = useState(false);
     const [deleteNoteId, setDeleteNoteId] = useState("");
-    const [confirmDelete, setDeleteConfirmation] = useState(false)
+    const [confirmDelete, setDeleteConfirmation] = useState(false);
+    const [editFlag, setEditFlag] = useState(false);
+    const [editNoteId, setEditNoteId] = useState("");
     
     const handleNewNoteClick = () => {
         setShowForm(true);
@@ -42,10 +45,11 @@ const NoteGroup = () => {
 
     const listStyle = {
         display: "flex",
-        listStyleType: "none"
+        listStyleType: "none",
+        flexDirection: "column"
     }
 
-    const buttonGroupStyle = {
+    const noteLineStyle = {
         display: "flex",
     }
 
@@ -63,20 +67,19 @@ const NoteGroup = () => {
     const noteList = noteChildrenArray.map((note) => {
         return (
             <li key={note._id} style={listStyle}>
-                <div style={buttonGroupStyle}>
-                    <Button style={noteBtnStyle} variant="primary" onClick={handleNewNoteClick}>
-                        <i className="far fa-edit"></i>
-                    </Button>
+                <div style={noteLineStyle}>
+                    <EditNoteButton style={noteBtnStyle} noteId={note._id} setEditFlag={setEditFlag} setEditNoteId={setEditNoteId}/>
                     <DeleteNoteButton style={noteBtnStyle} noteId={note._id} setDeleteFlag={setDeleteFlag} setDeleteNoteId={setDeleteNoteId}/>
+                    <Note 
+                        content={note.content} 
+                        noteId={note._id}
+                        deleteFlag={deleteFlag}
+                        deleteConfirmationClick={deleteConfirmationClick}
+                        cancelDelete={cancelDelete}
+                        deleteNoteId={deleteNoteId}
+                    />
                 </div>
-                <Note 
-                    content={note.content} 
-                    noteId={note._id}
-                    deleteFlag={deleteFlag}
-                    deleteConfirmationClick={deleteConfirmationClick}
-                    cancelDelete={cancelDelete}
-                    deleteNoteId={deleteNoteId}
-                />
+                {editFlag && note._id === editNoteId ? <NoteForm content={content} editContent={note.content} setContent={setContent} editFlag={editFlag} noteId={note._id} setEditFlag={setEditFlag}/> : ""}
             </li>
         )
     })
