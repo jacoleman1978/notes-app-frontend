@@ -53,6 +53,7 @@ const TopicForm = (props) => {
                     <Form.Control 
                         type="text" 
                         placeholder="Enter Topic Name"
+                        maxLength="50"
                         onChange={(e) => setTopicName(e.target.value)}
                         required 
                         value={topicName}
