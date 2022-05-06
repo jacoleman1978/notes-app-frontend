@@ -20,6 +20,10 @@ class UserDataService {
     static CheckSessionUser() {
         return axios.get('http://localhost:4343/auth/session', {withCredentials: true})
     }
+
+    static Logout() {
+        return axios.get('http://localhost:4343/auth/logout', {withCredentials: true})
+    }    
 }
 
 export default UserDataService;

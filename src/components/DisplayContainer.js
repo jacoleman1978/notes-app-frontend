@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import { CurrentUser } from '../contexts/currentUser';
 import NoteDataService from '../services/noteDataService';
 import UserDataService from '../services/userDataService';
@@ -9,6 +9,9 @@ import TopicGroup from './TopicGroup';
 import NoteGroup from './NoteGroup';
 
 const DisplayContainer = (props) => {
+    // Navigate allows redirection to another page when the button is clicked
+    const navigate = useNavigate();
+    
     // Get currentUser from context
     const {currentUser, setCurrentUser} = useContext(CurrentUser);
 
@@ -39,7 +42,11 @@ const DisplayContainer = (props) => {
     useEffect(() => {
         if (currentUser === null) {
             UserDataService.CheckSessionUser().then(res => {
-                setCurrentUser(res.data)
+                if (res.data === null) {
+                    navigate('/auth/login');
+                } else {
+                    setCurrentUser(res.data)
+                }
             })
         }
         
@@ -64,7 +71,7 @@ const DisplayContainer = (props) => {
         } else {
             setRefresh(false);
         }
-    }, [currentUser, topicId, isHome, refresh, setCurrentUser])
+    }, [currentUser, topicId, isHome, refresh, setCurrentUser, navigate])
 
     useEffect(() => {
         setBreadcrumb(breadcrumbs => [...new Set(breadcrumbs)])
