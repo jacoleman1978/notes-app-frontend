@@ -46,7 +46,6 @@ const TopicForm = (props) => {
                         Cancel
                     </Button>
                 </Col>
-
             </Row>
         </Form>
     )

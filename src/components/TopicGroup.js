@@ -35,7 +35,6 @@ const TopicGroup = (props) => {
         setDeleteConfirmation(true);
         navigate(-1);
         setRefresh(true);
-        
     }
 
     const cancelDelete = () => {

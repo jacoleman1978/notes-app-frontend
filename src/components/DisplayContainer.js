@@ -2,6 +2,7 @@ import React, {useContext, useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { CurrentUser } from '../contexts/currentUser';
 import NoteDataService from '../services/noteDataService';
+import UserDataService from '../services/userDataService';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
 import BreadCrumbs from './BreadCrumbs';
 import TopicGroup from './TopicGroup';
@@ -9,7 +10,7 @@ import NoteGroup from './NoteGroup';
 
 const DisplayContainer = (props) => {
     // Get currentUser from context
-    const {currentUser} = useContext(CurrentUser);
+    const {currentUser, setCurrentUser} = useContext(CurrentUser);
 
     // Props
     const {isHome} = props;
@@ -36,7 +37,13 @@ const DisplayContainer = (props) => {
     }
 
     useEffect(() => {
-        if (isHome && currentUser !== undefined) {
+        if (currentUser === null) {
+            UserDataService.CheckSessionUser().then(res => {
+                setCurrentUser(res.data)
+            })
+        }
+        
+        if (isHome && currentUser !== undefined && currentUser !== null) {
             // Get topic data for 'Home Directory' topic
             NoteDataService.GetHomeDirectory(currentUser.userName).then(res => {
                 if (res.data !== null) {
@@ -44,8 +51,9 @@ const DisplayContainer = (props) => {
                     setBreadcrumb([res.data._id]);
                     setRefresh(false);
                 }
+                setRefresh(false);
             })
-        } else if (!isHome){
+        } else if (!isHome && currentUser !== null){   
             NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
                 if (res.data !== null) {
                     saveTopicData(res);
@@ -56,7 +64,7 @@ const DisplayContainer = (props) => {
         } else {
             setRefresh(false);
         }
-    }, [currentUser, topicId, isHome, refresh])
+    }, [currentUser, topicId, isHome, refresh, setCurrentUser])
 
     useEffect(() => {
         setBreadcrumb(breadcrumbs => [...new Set(breadcrumbs)])
