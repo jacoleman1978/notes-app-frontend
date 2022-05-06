@@ -1,49 +1,51 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import { CurrentUser } from '../contexts/currentUser';
 import {Breadcrumb} from 'react-bootstrap';
 import { ParentTopicContext } from '../contexts/parentTopicContext';
 
 const BreadCrumbs = () => {
     // Get currentUser from context
-    const {parentTopicId, breadcrumbs, setBreadcrumb} = useContext(ParentTopicContext);
+    const {breadcrumbs} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
-
-    useEffect(() => {
-        setBreadcrumb(breadcrumbs => [...new Set(breadcrumbs)])
-    }, [setBreadcrumb, parentTopicId])
-
-    const lastBreadcrumbIndex = breadcrumbs.length - 1;
 
     const breadcrumbStyle = {
         color: "purple"
     }
 
-    const breadcrumbList = breadcrumbs.map((topicId, index) => {
+    console.log(breadcrumbs)
+
+    let breadcrumbList = Object.entries(breadcrumbs)
+
+    let lastIndex = breadcrumbList.length - 1;
+
+    const breadcrumbMap = breadcrumbList.map((topicSet, index) => {
         
-        if (index === lastBreadcrumbIndex) {
+        if (index === lastIndex) {
             return (
                 <Breadcrumb.Item 
                     key={index} 
                     active
                 >
-                    {topicId}
+                    {topicSet[1]}
                 </Breadcrumb.Item>
             )
         } else {
             return (
                 <Breadcrumb.Item 
                     key={index} 
-                    href={`/notes/${currentUser.userName}/${topicId}`}
+                    href={`/notes/${currentUser.userName}/${topicSet[0]}`}
                 >
-                    {topicId}
+                    {topicSet[1]}
                 </Breadcrumb.Item>
             )
         }
     })
 
+    
+
     return (
         <Breadcrumb style={breadcrumbStyle}>
-            {breadcrumbList}
+            {breadcrumbMap}
         </Breadcrumb>
     )
 }

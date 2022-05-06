@@ -27,7 +27,7 @@ const DisplayContainer = (props) => {
     let [parentTopicName, setParentTopicName] = useState("");
     let [topicChildrenArray, setTopicChildrenArray] = useState([]);
     let [noteChildrenArray, setNoteChildrenArray] = useState([]);
-    let [breadcrumbs, setBreadcrumb] = useState([]);
+    let [breadcrumbs, setBreadcrumb] = useState({});
     let [refresh, setRefresh] = useState(false);
 
     const saveTopicData = (res) => {
@@ -55,7 +55,11 @@ const DisplayContainer = (props) => {
             NoteDataService.GetHomeDirectory(currentUser.userName).then(res => {
                 if (res.data !== null) {
                     saveTopicData(res);
-                    setBreadcrumb([res.data._id]);
+                    let newBreadcrumb = {}
+                    let newTopicId = res.data._id;
+                    let newTopicName = res.data.topicName;
+                    newBreadcrumb[newTopicId] = newTopicName;
+                    setBreadcrumb(newBreadcrumb);
                     setRefresh(false);
                 }
                 setRefresh(false);
@@ -64,18 +68,20 @@ const DisplayContainer = (props) => {
             NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
                 if (res.data !== null) {
                     saveTopicData(res);
-                    setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id]);
+                    let newBreadcrumb = {}
+                    let newTopicId = res.data._id;
+                    let newTopicName = res.data.topicName;
+                    newBreadcrumb[newTopicId] = newTopicName;
+                    setBreadcrumb(breadcrumbs => ({...breadcrumbs, ...newBreadcrumb}));
+                    }
+
                     setRefresh(false);
                 }
-            })
+            )
         } else {
             setRefresh(false);
         }
     }, [currentUser, topicId, isHome, refresh, setCurrentUser, navigate])
-
-    useEffect(() => {
-        setBreadcrumb(breadcrumbs => [...new Set(breadcrumbs)])
-    }, [topicId])
 
     return (
         <ParentTopicContext.Provider value={{
