@@ -47,8 +47,10 @@ const DisplayContainer = (props) => {
             })
         } else if (!isHome){
             NoteDataService.GetTopicsAndNotes(currentUser.userName, topicId).then(res => {
-                saveTopicData(res);
-                setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id]);
+                if (res.data !== null) {
+                    saveTopicData(res);
+                    setBreadcrumb(breadcrumbs => [...breadcrumbs, res.data._id]);
+                }
                 setRefresh(false);
             })
         } else {
@@ -72,7 +74,7 @@ const DisplayContainer = (props) => {
             setRefresh: setRefresh
         }}>
             <BreadCrumbs />
-            <TopicGroup />
+            <TopicGroup isHome={isHome}/>
             <NoteGroup />
         </ParentTopicContext.Provider>
     )

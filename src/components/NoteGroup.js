@@ -47,7 +47,6 @@ const NoteGroup = () => {
 
     const buttonGroupStyle = {
         display: "flex",
-        marginLeft: "auto"
     }
 
     const noteBtnStyle = {
@@ -56,14 +55,20 @@ const NoteGroup = () => {
         justifyContent: "center",
         border: "1px solid red",
         margin: "5px",
-        height: "2rem",
-        width: "2rem",
-        fontSize: "1.5rem"
+        height: "1.6rem",
+        width: "1.6rem",
+        fontSize: "1.1rem"
     }
 
     const noteList = noteChildrenArray.map((note) => {
         return (
             <li key={note._id} style={listStyle}>
+                <div style={buttonGroupStyle}>
+                    <Button style={noteBtnStyle} variant="primary" onClick={handleNewNoteClick}>
+                        <i className="far fa-edit"></i>
+                    </Button>
+                    <DeleteNoteButton style={noteBtnStyle} noteId={note._id} setDeleteFlag={setDeleteFlag} setDeleteNoteId={setDeleteNoteId}/>
+                </div>
                 <Note 
                     content={note.content} 
                     noteId={note._id}
@@ -72,12 +77,6 @@ const NoteGroup = () => {
                     cancelDelete={cancelDelete}
                     deleteNoteId={deleteNoteId}
                 />
-                <div style={buttonGroupStyle}>
-                    <Button style={noteBtnStyle} variant="primary" onClick={handleNewNoteClick}>
-                        <i className="far fa-edit"></i>
-                    </Button>
-                    <DeleteNoteButton noteId={note._id} setDeleteFlag={setDeleteFlag} setDeleteNoteId={setDeleteNoteId}/>
-                </div>
             </li>
         )
     })
@@ -103,7 +102,6 @@ const NoteGroup = () => {
                 <Button style={noteBtnStyle} variant="success" onClick={handleNewNoteClick}>
                     +
                 </Button>
-
             </div>
             {showForm ? <NoteForm content={content} setContent={setContent} setShowForm={setShowForm}/> : ""}
             <ul style={listGroupStyle}>
