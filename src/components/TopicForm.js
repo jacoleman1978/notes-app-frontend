@@ -5,8 +5,10 @@ import { ParentTopicContext } from '../contexts/parentTopicContext';
 import { CurrentUser } from '../contexts/currentUser';
 
 const TopicForm = (props) => {
+    // Get props
     const {topicName, setTopicName, setShowForm, setEditTopicFlag, editTopicFlag} = props;
 
+    // Get topic and user data from context
     const {parentTopicName, parentTopicId, setRefresh} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
 
@@ -18,6 +20,7 @@ const TopicForm = (props) => {
         }
     }, [editTopicFlag, parentTopicName, setTopicName])
     
+    // Handle submission of new or edited topic depending on editTopicFlag
     const handleSubmit = (e) => {
         e.preventDefault();
         if (topicName.length !== 0) {
@@ -33,17 +36,22 @@ const TopicForm = (props) => {
         }
     }
 
+    // Cancel new or edit topic in order to hide the form
     const handleCancel = () => {
         if (editTopicFlag) {
             setEditTopicFlag(false);
         } else {
             setShowForm(false);
         }
-        
     }
 
+    // Component styling
     const rowStyle = {
-        marginLeft: "1.7rem"
+        marginLeft: "0.25rem"
+    }
+
+    const buttonStyle = {
+        marginRight: "0.5rem"
     }
 
     return (
@@ -60,7 +68,7 @@ const TopicForm = (props) => {
                     />
                 </Form.Group>
                 <Col sm={"4"}>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" style={buttonStyle}>
                         Submit
                     </Button>
                     <Button variant="danger" type="button" onClick={handleCancel}>

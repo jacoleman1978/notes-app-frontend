@@ -14,8 +14,10 @@ const NoteGroup = () => {
     const {currentUser} = useContext(CurrentUser);
 
     // State for new note flag
-    const [showForm, setShowForm] = useState(false);
     const [content, setContent] = useState("");
+
+    // State flags for new, edit and delete forms
+    const [showForm, setShowForm] = useState(false);
     const [deleteFlag, setDeleteFlag] = useState(false);
     const [deleteNoteId, setDeleteNoteId] = useState("");
     const [confirmDelete, setDeleteConfirmation] = useState(false);
@@ -23,16 +25,19 @@ const NoteGroup = () => {
     const [editNoteId, setEditNoteId] = useState("");
     const [displayNoteButtons, setDisplayNoteButtons] = useState(false);
     
+    // On click, set the flag to show the new input form
     const handleNewNoteClick = () => {
         setShowForm(true);
     }
 
+    // After confirming that the user does want to delete the note, delete it
     const deleteConfirmationClick = () => {
         NoteDataService.DeleteNote(currentUser.userName, parentTopicId, deleteNoteId);
         setDeleteConfirmation(true);
         setRefresh(true);
     }
 
+    // Cancel button was pressed when asked for delete confirmation
     const cancelDelete = () => {
         setDeleteConfirmation(false);
         setDeleteFlag(false);
@@ -44,10 +49,12 @@ const NoteGroup = () => {
         }
     }, [confirmDelete])
 
+    // Component styling
     const listStyle = {
         display: "flex",
         listStyleType: "none",
-        flexDirection: "column"
+        flexDirection: "column",
+        width: "100%"
     }
 
     const noteLineStyle = {
@@ -58,7 +65,6 @@ const NoteGroup = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        border: "1px solid red",
         margin: "5px",
         height: "1.6rem",
         width: "1.6rem",
@@ -90,11 +96,20 @@ const NoteGroup = () => {
     const noteGroupStyle = {
         display: "flex",
         flexDirection: "column",
+        padding: "0.75rem",
+        borderRadius: "1rem",
+        backgroundColor: "#DAD6BA",
+        marginTop: "1rem"
     }
 
     const noteTitleStyle = {
         display: "flex",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderBottom: "black 0.5px solid",
+        marginBottom: "0.5rem",
+        marginLeft: "0.5rem",
+        marginRight: "0.5rem",
+        paddingBottom: "0.25rem"
     }
 
     const listGroupStyle = {
@@ -116,6 +131,7 @@ const NoteGroup = () => {
         marginRight: "0.5rem"
     }
 
+    // Toggles whether the edit and delete buttons for each note are displayed
     const displayCheckboxFlag = () => {
         setDisplayNoteButtons(!displayNoteButtons);
     }

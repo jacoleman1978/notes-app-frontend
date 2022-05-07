@@ -6,5 +6,8 @@ export const ParentTopicContext = createContext({
     parentTopicName: "",
     topicChildrenArray: [],
     noteChildrenArray: [],
-    breadcrumbs: []
+    breadcrumbs: [],
+    setBreadcrumb: () => {},
+    setRefresh: () => {},
+    refresh: false
 })

@@ -1,7 +1,10 @@
 .App {
   text-align: center;
+  background-color: lightgoldenrodyellow;
 }
 
 html {
   font-size: 18px;
+  background-color: lightgoldenrodyellow;
+  padding: 0.5rem 2rem;
 }

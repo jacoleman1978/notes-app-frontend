@@ -3,6 +3,7 @@ import { CurrentUser } from '../contexts/currentUser';
 import {useNavigate} from 'react-router-dom';
 
 const Topic = (props) => {
+    // Get props
     const {topicName, topicId} = props;
 
     // Get currentUser from context
@@ -10,17 +11,20 @@ const Topic = (props) => {
 
     const navigate = useNavigate();
 
+    // If a topic is clicked on redirect to view of that topic as the parent topic
     const handleTopicClick = (e) => {
         navigate(`/notes/${currentUser.userName}/${topicId}`)
     }
 
+    // Component style
     const topicStyle = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        border: "1px solid red",
+        backgroundColor: "#C0BDA7",
+        borderRadius: "0.75rem",
         margin: "5px",
-        height: "5rem",
+        height: "2.5rem",
         width: "14rem"
     }
 

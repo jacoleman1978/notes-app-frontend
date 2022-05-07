@@ -11,27 +11,32 @@ import DeleteTopicButton from './DeleteTopicButton';
 import EditTopicButton from './EditTopicButton';
 
 const TopicGroup = (props) => {
-    const {isHome} = props;
-
     const navigate = useNavigate();
 
-    // Get topic data from context
-    const {topicChildrenArray, parentTopicName, setRefresh, parentTopicId} = useContext(ParentTopicContext);
+    // Get props
+    const {isHome} = props;
+
+    // Get topic and user data from context
+    const {topicChildrenArray, parentTopicName, setRefresh, parentTopicId, refresh} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
 
-    // State for new topic flag
-    const [showForm, setShowForm] = useState(false);
+    // State for new topicName
     const [topicName, setTopicName] = useState("");
+
+    // State flags for new, edit and delete forms
+    const [showForm, setShowForm] = useState(false);
     const [deleteFlag, setDeleteFlag] = useState(false);
     const [deleteTopicId, setDeleteTopicId] = useState("");
     const [confirmDelete, setDeleteConfirmation] = useState(false);
     const [showDeleteMessage, setShowDeleteMessage] = useState(false);
     const [editTopicFlag, setEditTopicFlag] = useState(false);
 
+    // On click, set the flag to show the new input form
     const handleNewTopicClick = () => {
         setShowForm(true);
     }
 
+    // After confirming that the user does want to delete the topic, delete it and navigate to the parentTopic
     const deleteConfirmationClick = () => {
         NoteDataService.DeleteTopic(currentUser.userName, parentTopicId);
         setDeleteConfirmation(true);
@@ -39,6 +44,7 @@ const TopicGroup = (props) => {
         setRefresh(true);
     }
 
+    // Cancel button was pressed when asked for delete confirmation
     const cancelDelete = () => {
         setDeleteConfirmation(false);
         setDeleteFlag(false);
@@ -55,9 +61,17 @@ const TopicGroup = (props) => {
             setShowDeleteMessage(true);
         } else {
             setShowDeleteMessage(false);
+            setRefresh(false);
         }
-    }, [deleteFlag, parentTopicId, deleteTopicId])
+    }, [deleteFlag, parentTopicId, deleteTopicId, refresh, setRefresh])
 
+    // Component styling
+    const topicContainerStyle = {
+        padding: "0.75rem",
+        borderRadius: "1rem",
+        backgroundColor: "#DAD6BA"
+    }
+    
     const topicGroupStyle = {
         display: "flex",
         flexWrap: "wrap",
@@ -67,14 +81,22 @@ const TopicGroup = (props) => {
 
     const topicTitleStyle = {
         display: "flex",
-        justifyContent: "center"
+        flexWrap: "wrap",
+        borderBottom: "black 0.5px solid",
+        marginBottom: "0.5rem",
+        marginLeft: "0.5rem",
+        marginRight: "0.5rem"
+    }
+
+    const buttonGroupStyle = {
+        display: "flex",
+        marginLeft: "auto"
     }
 
     const topicBtnStyle = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        border: "1px solid red",
         margin: "5px",
         height: "2.5rem",
         width: "2.5rem",
@@ -92,14 +114,17 @@ const TopicGroup = (props) => {
     })
 
     return (
-        <div>
+        <div style={topicContainerStyle}>
             <div style={topicTitleStyle}>
                 <h1>Topic: {parentTopicName}</h1>
-                <Button variant="success" style={topicBtnStyle} onClick={handleNewTopicClick}>
-                    +
-                </Button>
-                {!isHome ? <DeleteTopicButton topicBtnStyle={topicBtnStyle} setDeleteFlag={setDeleteFlag} setDeleteTopicId={setDeleteTopicId} parentTopicId={parentTopicId} setShowDeleteMessage={setShowDeleteMessage}/> : ""}
-                {!isHome ? <EditTopicButton setEditTopicFlag={setEditTopicFlag} topicBtnStyle={topicBtnStyle}/> : ""}
+                <div style={buttonGroupStyle}>
+                    <Button variant="success" style={topicBtnStyle} onClick={handleNewTopicClick}>
+                        +
+                    </Button>
+                    {!isHome ? <DeleteTopicButton topicBtnStyle={topicBtnStyle} setDeleteFlag={setDeleteFlag} setDeleteTopicId={setDeleteTopicId} parentTopicId={parentTopicId} setShowDeleteMessage={setShowDeleteMessage}/> : ""}
+                    {!isHome ? <EditTopicButton setEditTopicFlag={setEditTopicFlag} topicBtnStyle={topicBtnStyle}/> : ""}
+                </div>
+
 
             </div>
             {showForm ? <TopicForm topicName={topicName} setTopicName={setTopicName} setShowForm={setShowForm}/> : ""}

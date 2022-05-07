@@ -8,10 +8,6 @@ const BreadCrumbs = () => {
     const {breadcrumbs} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
 
-    const breadcrumbStyle = {
-        color: "purple"
-    }
-
     let breadcrumbList = Object.entries(breadcrumbs)
 
     let lastIndex = breadcrumbList.length - 1;
@@ -39,12 +35,20 @@ const BreadCrumbs = () => {
         }
     })
 
-    
+    // Component styling
+    const containerStyle = {
+        padding: "0.5rem 0rem",
+    }
 
     return (
-        <Breadcrumb style={breadcrumbStyle}>
-            {breadcrumbMap}
-        </Breadcrumb>
+        <div style={containerStyle}>
+            <Breadcrumb >
+                {breadcrumbMap}
+            </Breadcrumb>
+            <hr/>
+        </div>
+        
+
     )
 }
 

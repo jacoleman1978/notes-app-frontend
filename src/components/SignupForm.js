@@ -3,8 +3,9 @@ import {useNavigate} from 'react-router-dom';
 import {Form, Button, Row, Col} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
 
+
+// Called from App.js
 const SignupForm = () => {
-    // Navigate allows redirection to another page when the form is submitted
     const navigate = useNavigate();
 
     // Use state to keep track of info entered into the form
@@ -30,8 +31,9 @@ const SignupForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // If the two password fields match contents, continue verification
         if (formPassword === formVerifyPassword) {
-            setPasswordError(false)
+            setPasswordError(false);
 
             let data = {
                 firstName: formFirstName,
@@ -48,11 +50,12 @@ const SignupForm = () => {
                 } else if (!res.data.isUniqueEmail) {
                     setErrorMessage(emailErrorMessage);
                 } else {
+                    // UserName and email are unique, so create user account and redirect to the 'Home Directory'
                     UserDataService.Signup(data).then(res => {
                         navigate(`/notes/${res.data.userName}`);
-                    })
+                    });
                 }
-            })
+            });
             
         } else {
             setErrorMessage(passwordErrorMessage);
@@ -81,8 +84,17 @@ const SignupForm = () => {
         navigate('/auth/login');
     };
 
+    // Component styling
+    const signupContainerStyle = {
+        padding: "1rem 0rem"
+    }
+
+    const formStyle = {
+        padding: "1rem 3rem"
+    }
+
     return (
-        <div>
+        <div style={signupContainerStyle}>
             <Button 
                 type="button"
                 variant="secondary"
@@ -91,7 +103,7 @@ const SignupForm = () => {
                 Back to Login
             </Button>
             
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} style={formStyle}>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formFirstName">
                         <Form.Label>First Name</Form.Label>

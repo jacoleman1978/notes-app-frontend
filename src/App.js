@@ -7,12 +7,11 @@ import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import DisplayContainer from "./components/DisplayContainer";
 import CurrentUserProvider from './contexts/currentUser'
-import {Container} from 'react-bootstrap';
 
 function App() {
   return (
       <CurrentUserProvider>
-        <Container className="App">
+        <div className="App">
           <NavBar />
           <Router>
             <Routes>
@@ -23,7 +22,7 @@ function App() {
               <Route path='/notes/:userName/:topicId' element={<DisplayContainer isHome={false}/>} />
             </Routes>
           </Router>
-        </Container>
+        </div>
       </CurrentUserProvider>
   );
 }

@@ -5,8 +5,10 @@ import { ParentTopicContext } from '../contexts/parentTopicContext';
 import { CurrentUser } from '../contexts/currentUser';
 
 const NoteForm = (props) => {
+    // Get props
     const {content, editContent, setContent, setShowForm, editFlag, noteId, setEditFlag} = props;
 
+    // Get topic and user data from context
     const {parentTopicId, setRefresh} = useContext(ParentTopicContext);
     const {currentUser} = useContext(CurrentUser);
 
@@ -18,21 +20,23 @@ const NoteForm = (props) => {
         }
     }, [editFlag, editContent, setContent])
 
-    const handleSubmit = (e) => {
+    // Handle submission of new or edited note depending on editFlag
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (content.length !== 0) {
             if (editFlag) {
-                NoteDataService.EditNote(currentUser.userName, parentTopicId, noteId, content)
+                await NoteDataService.EditNote(currentUser.userName, parentTopicId, noteId, content)
                 setEditFlag(false);
                 setRefresh(true);
             } else {
-                NoteDataService.NewNote(currentUser.userName, parentTopicId, content)
+                await NoteDataService.NewNote(currentUser.userName, parentTopicId, content)
                 setShowForm(false);
                 setRefresh(true);
             }
         }
     }
 
+    // Cancel new or edit note in order to hide the form
     const handleCancel = () => {
         if (editFlag) {
             setEditFlag(false);
@@ -41,12 +45,14 @@ const NoteForm = (props) => {
         }
     }
 
+    // Component styling
     const formStyle = {
-        marginLeft: "4.65rem"
+        marginLeft: "1rem",
     }
 
     const buttonGroupStyle = {
         display: "flex",
+        justifyContent: "center",
         alignItems: "start",
         paddingLeft: "0px",
     }
@@ -55,10 +61,14 @@ const NoteForm = (props) => {
         bottomMargin: "0px"
     }
 
+    const buttonStyle = {
+        marginRight: "0.5rem"
+    }
+
     return (
         <Form onSubmit={handleSubmit} style={formStyle}>
             <Row>
-                <Form.Group sm={8} as={Col} className="mb-3" controlId="formContent" style={inputStyle}>
+                <Form.Group sm={"8"} as={Col} className="mb-3" controlId="formContent" style={inputStyle}>
                     <Form.Control 
                         type="text" 
                         placeholder="Enter Note Content"
@@ -68,7 +78,7 @@ const NoteForm = (props) => {
                     />
                 </Form.Group>
                 <Col sm={"4"} style={buttonGroupStyle}>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" style={buttonStyle}>
                         Submit
                     </Button>
                     <Button variant="danger" type="button" onClick={handleCancel}>

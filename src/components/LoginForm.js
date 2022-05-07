@@ -4,12 +4,13 @@ import {Form, Button} from 'react-bootstrap';
 import UserDataService from '../services/userDataService';
 import { CurrentUser } from '../contexts/currentUser';
 
+// Called from App.js
 const LoginForm = () => {
-    // Navigate allows redirection to another page when the button is clicked
     const navigate = useNavigate();
 
-    // Store current user in Context
+    // Store current user session after successful login
     const {setCurrentUser} = useContext(CurrentUser);
+    UserDataService.CheckSessionUser().then(res => setCurrentUser(res.data));
     
     // Use state to keep track of info entered into the form
     let [formUserName, setUserName] = useState("");
@@ -23,14 +24,18 @@ const LoginForm = () => {
     // Use the DataService to attempt to login
     const handleSubmit = (e) => {
         e.preventDefault();
+
         let data = {
             username: formUserName,
             password: formPassword
         };
+
         UserDataService.Login(data).then(res => {
             if (res.data.userName.length > 0) {
+                // Store user info in context after successful login and redirect to 'Home Directory'
                 setCurrentUser(res.data.session);
                 navigate(`/notes/${res.data.userName}`);
+
             } else {
                 setErrorMessage(res.data.message);
             } 
@@ -53,48 +58,85 @@ const LoginForm = () => {
         navigate('/auth/signup');
     };
 
+    // Component styling
+    const formStyle = {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "1rem 3rem"
+    }
+
+    const inputStyle = {
+        display: "flex",
+        
+    }
+
+    const labelStyle = {
+        display: "flex",
+        alignItems: "center",
+        marginBottom: "0px",
+        marginRight: "1rem",
+        width: "7rem"
+    }
+
+    const buttonGroupStyle = {
+        display: "flex",
+        justifyContent: "center"
+    }
+
+    const buttonStyle = {
+        marginRight: "0.5rem"
+    }
+
     return (
-        <div>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formUserName">
-                    <Form.Label>Username</Form.Label>
+        <Form onSubmit={handleSubmit} style={formStyle}>
+            <Form.Group className="mb-3" controlId="formUserName">
+                <div style={inputStyle}>
+                    <Form.Label style={labelStyle}>Username:</Form.Label>
                     <Form.Control 
                         type="text" 
                         placeholder="Enter username"
                         onChange={(e) => setUserName(e.target.value)}
                         required 
                     />
-                    <Form.Text>
-                        {userNameError ? errorMessage : ""}
-                    </Form.Text>
-                </Form.Group>
+                </div>
 
-                <Form.Group className="mb-3" controlId="formPassword">
-                    <Form.Label>Password</Form.Label>
+                <Form.Text>
+                    {userNameError ? errorMessage : ""}
+                </Form.Text>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formPassword">
+                <div style={inputStyle}>
+                    <Form.Label style={labelStyle}>Password:</Form.Label>
                     <Form.Control 
                         type="password" 
                         placeholder="Password" 
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <Form.Text>
-                        {passwordError ? errorMessage : ""}
-                    </Form.Text>
-                </Form.Group>
+                </div>
 
-                <Button variant="primary" type="submit">
+                <Form.Text>
+                    {passwordError ? errorMessage : ""}
+                </Form.Text>
+            </Form.Group>
+
+            <div style={buttonGroupStyle}>
+                <Button variant="primary" type="submit" style={buttonStyle}>
                     Login
                 </Button>
-            </Form>
-            <Button 
-                variant="secondary" 
-                type="button"
-                onClick={handleCreateAccount}
-            >
-                Create Account
-            </Button>
+                <Button 
+                    variant="secondary" 
+                    type="button"
+                    onClick={handleCreateAccount}
+                >
+                    Create Account
+                </Button>
+            </div>
 
-        </div>
+        </Form>
     )
 }
 
