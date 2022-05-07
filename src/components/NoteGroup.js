@@ -124,6 +124,8 @@ const NoteGroup = () => {
     }
 
     const notesTitleStyle = {
+        display: "flex",
+        flexWrap: "wrap",
         marginBottom: "0px"
     }
 
