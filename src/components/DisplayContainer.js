@@ -97,7 +97,7 @@ const DisplayContainer = (props) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "0.5rem 1rem",
+        padding: "0.5rem 0rem",
     }
 
     return (
